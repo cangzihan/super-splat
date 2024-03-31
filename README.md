@@ -1,6 +1,6 @@
 # SuperSplat紫寒魔改版
 
-Official tools: https://playcanvas.com/super-splat
+Official online tool ***(not mine)***: https://playcanvas.com/super-splat
 
 ## New feature
 
