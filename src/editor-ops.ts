@@ -14,7 +14,7 @@ import { EditorUI } from './ui/editor';
 import { EditHistory, EditOp } from './edit-history';
 import { Element, ElementType } from './element';
 import { Splat } from './splat';
-import { deletedOpacity, DeleteSelectionEditOp, ResetEditOp } from './edit-ops';
+import { deletedOpacity, DeleteSelectionEditOp, DeleteSelectionEditOp2, ResetEditOp } from './edit-ops';
 import { SplatDebug } from './splat-debug';
 import { convertPly, convertPlyCompressed, convertSplat } from './splat-convert';
 import { startSpinner, stopSpinner } from './ui/spinner';
@@ -191,7 +191,7 @@ const registerEvents = (events: Events, editHistory: EditHistory, scene: Scene, 
     };
 
     events.on('edit:apply', (editOp: EditOp) => {
-        if (editOp instanceof DeleteSelectionEditOp || editOp instanceof ResetEditOp) {
+        if (editOp instanceof DeleteSelectionEditOp || editOp instanceof DeleteSelectionEditOp2 || editOp instanceof ResetEditOp) {
             updateColorData();
         }
     });
@@ -475,6 +475,13 @@ const registerEvents = (events: Events, editHistory: EditHistory, scene: Scene, 
         splatDefs.forEach((splatDef) => {
             const splatData = splatDef.data;
             editHistory.add(new DeleteSelectionEditOp(splatData));
+        });
+    });
+
+    events.on('deleteSelection2', (valueR: number, valueG: number, valueB: number) => {
+        splatDefs.forEach((splatDef) => {
+            const splatData = splatDef.data;
+            editHistory.add(new DeleteSelectionEditOp2(splatData, valueR, valueG, valueB));
         });
     });
 

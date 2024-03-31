@@ -1,3 +1,4 @@
+// 这个文件里设定了很多组件的UI信息
 import { BooleanInput, Button, Container, Label, NumericInput, Panel, RadioButton, SelectInput, SliderInput, VectorInput } from 'pcui';
 import { Events } from '../events';
 import { version as supersplatVersion } from '../../package.json';
@@ -38,11 +39,15 @@ class ControlPanel extends Panel {
             text: 'Splat Size'
         });
 
+        // const 是 JavaScript 中的一个关键字，用于声明一个常量，即其值在声明后不能被修改的变量
         const splatSizeSlider = new SliderInput({
+            // 设置滑块输入组件的 CSS 类名
             class: 'control-element-expand',
+            // 设置滑块的数值精度，即小数点后的位数
             precision: 1,
             min: 0,
             max: 10,
+            // 设置滑块的初始值为 2
             value: 2
         });
 
@@ -285,6 +290,84 @@ class ControlPanel extends Panel {
             icon: 'E124'
         });
 
+        const deleteSelectionFilterButton = new Button({
+            class: 'control-element',
+            text: '按条件删除点',
+            icon: 'E124'
+        });
+
+        // R
+        const filterR = new Container({
+            class: 'control-element'
+        });
+
+        const sliderRLabel = new Label({
+            class: 'control-label',
+            text: 'min R'
+        });
+
+        const sliderR = new SliderInput({
+            // 设置滑块输入组件的 CSS 类名
+            class: 'control-element-expand',
+            // 设置滑块的数值精度，即小数点后的位数
+            precision: 2,
+            min: -3,
+            max: 3,
+            // 设置滑块的初始值
+            value: -0.1
+        });
+
+        filterR.append(sliderRLabel);
+        filterR.append(sliderR);
+
+        // G
+        const filterG = new Container({
+            class: 'control-element'
+        });
+
+        const sliderGLabel = new Label({
+            class: 'control-label',
+            text: 'min G'
+        });
+
+        const sliderG = new SliderInput({
+            // 设置滑块输入组件的 CSS 类名
+            class: 'control-element-expand',
+            // 设置滑块的数值精度，即小数点后的位数
+            precision: 2,
+            min: -3,
+            max: 3,
+            // 设置滑块的初始值为 0
+            value: 0
+        });
+
+        filterG.append(sliderGLabel);
+        filterG.append(sliderG);
+
+        // B
+        const filterB = new Container({
+            class: 'control-element'
+        });
+
+        const sliderBLabel = new Label({
+            class: 'control-label',
+            text: 'min B'
+        });
+
+        const sliderB = new SliderInput({
+            // 设置滑块输入组件的 CSS 类名
+            class: 'control-element',
+            // 设置滑块的数值精度，即小数点后的位数
+            precision: 2,
+            min: -3,
+            max: 3,
+            // 设置滑块的初始值
+            value: -0.1
+        });
+
+        filterB.append(sliderBLabel);
+        filterB.append(sliderB);
+
         const resetButton = new Button({
             class: 'control-element',
             text: 'Reset Splats'
@@ -312,6 +395,10 @@ class ControlPanel extends Panel {
         undoRedo.append(redoButton);
 
         modifyPanel.append(deleteSelectionButton);
+        modifyPanel.append(deleteSelectionFilterButton);
+        modifyPanel.append(filterR);
+        modifyPanel.append(filterG);
+        modifyPanel.append(filterB);
         modifyPanel.append(resetButton);
         modifyPanel.append(undoRedo);
 
@@ -467,7 +554,14 @@ class ControlPanel extends Panel {
         });
 
         splatSizeSlider.on('change', (value: number) => {
+            // 在事件回调函数中，通过 events 对象触发了一个名为 splatSize 的自定义事件，并将滑动条的当前值作为参数传递给了这个事件
             events.fire('splatSize', value);
+        });
+
+        sliderG.on('change', (value: number) => {
+        });
+
+        sliderB.on('change', (value: number) => {
         });
 
         showGridToggle.on('change', (enabled: boolean) => {
@@ -500,6 +594,10 @@ class ControlPanel extends Panel {
 
         deleteSelectionButton.on('click', () => {
             events.fire('deleteSelection');
+        });
+
+        deleteSelectionFilterButton.on('click', () => {
+            events.fire('deleteSelection2', sliderR.value, sliderG.value, sliderB.value);
         });
 
         resetButton.on('click', () => {
