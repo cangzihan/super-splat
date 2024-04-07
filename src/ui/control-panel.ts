@@ -301,8 +301,9 @@ class ControlPanel extends Panel {
             class: 'control-parent'
         });
 
-        const filterRMaxRadio = new RadioButton({
-            class: 'control-element'
+        const filterRMaxToggle = new BooleanInput({
+            class: 'control-element',
+            value: false
         });
 
         const filterRMaxLabel = new Label({
@@ -318,10 +319,11 @@ class ControlPanel extends Panel {
             min: -3,
             max: 3,
             // 设置滑块的初始值
-            value: 3.0
+            value: 3.0,
+            enabled: false
         });
 
-        filterRMax.append(filterRMaxRadio);
+        filterRMax.append(filterRMaxToggle);
         filterRMax.append(filterRMaxLabel);
         filterRMax.append(filterRMaxSlider);
 
@@ -378,8 +380,9 @@ class ControlPanel extends Panel {
             class: 'control-parent'
         });
 
-        const filterGMaxRadio = new RadioButton({
-            class: 'control-element'
+        const filterGMaxToggle = new BooleanInput({
+            class: 'control-element',
+            value: false
         });
 
         const filterGMaxLabel = new Label({
@@ -395,10 +398,11 @@ class ControlPanel extends Panel {
             min: -3,
             max: 3,
             // 设置滑块的初始值
-            value: 3.0
+            value: 3.0,
+            enabled: false
         });
 
-        filterGMax.append(filterGMaxRadio);
+        filterGMax.append(filterGMaxToggle);
         filterGMax.append(filterGMaxLabel);
         filterGMax.append(filterGMaxSlider);
 
@@ -431,8 +435,9 @@ class ControlPanel extends Panel {
             class: 'control-parent'
         });
 
-        const filterBMaxRadio = new RadioButton({
-            class: 'control-element'
+        const filterBMaxToggle = new BooleanInput({
+            class: 'control-element',
+            value: false
         });
 
         const filterBMaxLabel = new Label({
@@ -448,10 +453,11 @@ class ControlPanel extends Panel {
             min: -3,
             max: 3,
             // 设置滑块的初始值
-            value: 3.0
+            value: 3.0,
+            enabled: false
         });
 
-        filterBMax.append(filterBMaxRadio);
+        filterBMax.append(filterBMaxToggle);
         filterBMax.append(filterBMaxLabel);
         filterBMax.append(filterBMaxSlider);
 
@@ -576,7 +582,7 @@ class ControlPanel extends Panel {
         });
 
         // radio logic
-        // 这里用于控制哪些会组件会使得Set, Add, Remove按钮被激活
+        // 这里用于控制radioGroup包含哪些radio，哪些会组件会使得Set, Add, Remove按钮被激活
         const radioGroup = [selectBySizeRadio, selectByOpacityRadio, selectBySphereRadio, selectByPlaneRadio];
         radioGroup.forEach((radio, index) => {
             radio.on('change', () => {
@@ -605,17 +611,22 @@ class ControlPanel extends Panel {
         let radioSelection: number | null = null;
         events.on('selectBy', (index: number | null) => {
             radioSelection = index;
-
-            setButton.enabled = index !== null;
-            addButton.enabled = index !== null;
-            removeButton.enabled = index !== null;
-
+            
             // 这里和Set, Add, Remove按钮有关
+            if (index < 4) {
+                setButton.enabled = index !== null;
+                addButton.enabled = index !== null;
+                removeButton.enabled = index !== null;
+            }
+
+            // 这里控制radioGroup的每个元素会激活哪个/哪些按钮
             const controlSet = [
                 [selectBySizeSlider],
                 [selectByOpacitySlider],
                 [selectBySphereCenter],
-                [selectByPlaneAxis, selectByPlaneOffset]
+                [selectByPlaneAxis, selectByPlaneOffset],
+            //    [filterGMaxSlider],
+            //    [filterBMaxSlider]
             ];
 
             controlSet.forEach((controls, controlsIndex) => {
@@ -660,6 +671,18 @@ class ControlPanel extends Panel {
             events.fire('showGrid', enabled);
         });
 
+        filterRMaxToggle.on('change', (enabled: boolean) => {
+            filterRMaxSlider.enabled = enabled;
+        });
+
+        filterGMaxToggle.on('change', (enabled: boolean) => {
+            filterGMaxSlider.enabled = enabled;
+        });
+
+        filterBMaxToggle.on('change', (enabled: boolean) => {
+            filterBMaxSlider.enabled = enabled;
+        });
+
         selectAllButton.on('click', () => {
             events.fire('selectAll');
         });
@@ -690,7 +713,8 @@ class ControlPanel extends Panel {
 
         deleteSelectionFilterButton.on('click', () => {
             events.fire('deleteSelection2', sliderR.value, filterRMaxSlider.value, 
-            sliderG.value, filterGMaxSlider.value, sliderB.value, filterBMaxSlider.value);
+            sliderG.value, filterGMaxSlider.value, sliderB.value, filterBMaxSlider,
+            filterRMaxToggle.value, filterGMaxToggle.value);
         });
 
         resetButton.on('click', () => {

@@ -74,7 +74,7 @@ class DeleteSelectionEditOp2 {
     indices: Uint32Array;
     opacity: Float32Array;
 
-    constructor(splatData: GSplatData, colorThresholdR: number, colorThresholdRMax: number, colorThresholdG: number, colorThresholdGMax: number, colorThresholdB: number, colorThresholdBMax: number) {
+    constructor(splatData: GSplatData, colorThresholdR: number, colorThresholdRMax: number, colorThresholdG: number, colorThresholdGMax: number, colorThresholdB: number, colorThresholdBMax: number, enableRMax: boolean, enableGMax: boolean, enableBMax: boolean) {
         const selection = splatData.getProp('selection');
         const f_dc_0 = splatData.getProp('f_dc_0');
         const f_dc_1 = splatData.getProp('f_dc_1');
@@ -83,8 +83,8 @@ class DeleteSelectionEditOp2 {
         const indices = buildIndex(splatData, (i) => {
             // 同时满足选区和颜色的条件
             return selection[i] > 0 && f_dc_0[i] > colorThresholdR && f_dc_1[i] > colorThresholdG 
-            && f_dc_2[i] > colorThresholdB && f_dc_0[i] < colorThresholdRMax
-            && f_dc_1[i] < colorThresholdGMax && f_dc_2[i] < colorThresholdBMax;
+            && f_dc_2[i] > colorThresholdB && (f_dc_0[i] < colorThresholdRMax || enableRMax===false)
+            && (f_dc_1[i] < colorThresholdGMax || enableGMax===false) && (f_dc_2[i] < colorThresholdBMax || enableBMax===false);
         });
 
         this.splatData = splatData;

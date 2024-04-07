@@ -19,6 +19,7 @@ import { SplatDebug } from './splat-debug';
 import { convertPly, convertPlyCompressed, convertSplat } from './splat-convert';
 import { startSpinner, stopSpinner } from './ui/spinner';
 import { Events } from './events';
+import { SliderInput } from '@playcanvas/pcui';
 
 // download the data uri
 const download = (filename: string, data: ArrayBuffer) => {
@@ -478,10 +479,10 @@ const registerEvents = (events: Events, editHistory: EditHistory, scene: Scene, 
         });
     });
 
-    events.on('deleteSelection2', (valueR: number, valueRMax: number, valueG: number, valueGMax: number, valueB: number, valueBMax: number) => {
+    events.on('deleteSelection2', (valueR: number, valueRMax: number, valueG: number, valueGMax: number, valueB: number, valueBMax: SliderInput, enableRMax: boolean, enableGMax: boolean) => {
         splatDefs.forEach((splatDef) => {
             const splatData = splatDef.data;
-            editHistory.add(new DeleteSelectionEditOp2(splatData, valueR, valueRMax, valueG, valueGMax, valueB, valueBMax));
+            editHistory.add(new DeleteSelectionEditOp2(splatData, valueR, valueRMax, valueG, valueGMax, valueB, valueBMax.value, enableRMax, enableGMax, valueBMax.enabled));
         });
     });
 
