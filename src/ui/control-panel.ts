@@ -297,6 +297,35 @@ class ControlPanel extends Panel {
         });
 
         // R
+        const filterRMax = new Container({
+            class: 'control-parent'
+        });
+
+        const filterRMaxRadio = new RadioButton({
+            class: 'control-element'
+        });
+
+        const filterRMaxLabel = new Label({
+            class: 'control-label',
+            text: 'max R'
+        });
+
+        const filterRMaxSlider = new SliderInput({
+            // 设置滑块输入组件的 CSS 类名
+            class: 'control-element-expand',
+            // 设置滑块的数值精度，即小数点后的位数
+            precision: 2,
+            min: -3,
+            max: 3,
+            // 设置滑块的初始值
+            value: 3.0
+        });
+
+        filterRMax.append(filterRMaxRadio);
+        filterRMax.append(filterRMaxLabel);
+        filterRMax.append(filterRMaxSlider);
+
+        // R
         const filterR = new Container({
             class: 'control-element'
         });
@@ -344,6 +373,35 @@ class ControlPanel extends Panel {
         filterG.append(sliderGLabel);
         filterG.append(sliderG);
 
+        // G
+        const filterGMax = new Container({
+            class: 'control-parent'
+        });
+
+        const filterGMaxRadio = new RadioButton({
+            class: 'control-element'
+        });
+
+        const filterGMaxLabel = new Label({
+            class: 'control-label',
+            text: 'max G'
+        });
+
+        const filterGMaxSlider = new SliderInput({
+            // 设置滑块输入组件的 CSS 类名
+            class: 'control-element-expand',
+            // 设置滑块的数值精度，即小数点后的位数
+            precision: 2,
+            min: -3,
+            max: 3,
+            // 设置滑块的初始值
+            value: 3.0
+        });
+
+        filterGMax.append(filterGMaxRadio);
+        filterGMax.append(filterGMaxLabel);
+        filterGMax.append(filterGMaxSlider);
+
         // B
         const filterB = new Container({
             class: 'control-element'
@@ -367,6 +425,35 @@ class ControlPanel extends Panel {
 
         filterB.append(sliderBLabel);
         filterB.append(sliderB);
+
+        // B
+        const filterBMax = new Container({
+            class: 'control-parent'
+        });
+
+        const filterBMaxRadio = new RadioButton({
+            class: 'control-element'
+        });
+
+        const filterBMaxLabel = new Label({
+            class: 'control-label',
+            text: 'max B'
+        });
+
+        const filterBMaxSlider = new SliderInput({
+            // 设置滑块输入组件的 CSS 类名
+            class: 'control-element-expand',
+            // 设置滑块的数值精度，即小数点后的位数
+            precision: 2,
+            min: -3,
+            max: 3,
+            // 设置滑块的初始值
+            value: 3.0
+        });
+
+        filterBMax.append(filterBMaxRadio);
+        filterBMax.append(filterBMaxLabel);
+        filterBMax.append(filterBMaxSlider);
 
         const resetButton = new Button({
             class: 'control-element',
@@ -397,8 +484,11 @@ class ControlPanel extends Panel {
         modifyPanel.append(deleteSelectionButton);
         modifyPanel.append(deleteSelectionFilterButton);
         modifyPanel.append(filterR);
+        modifyPanel.append(filterRMax);
         modifyPanel.append(filterG);
+        modifyPanel.append(filterGMax);
         modifyPanel.append(filterB);
+        modifyPanel.append(filterBMax);
         modifyPanel.append(resetButton);
         modifyPanel.append(undoRedo);
 
@@ -486,6 +576,7 @@ class ControlPanel extends Panel {
         });
 
         // radio logic
+        // 这里用于控制哪些会组件会使得Set, Add, Remove按钮被激活
         const radioGroup = [selectBySizeRadio, selectByOpacityRadio, selectBySphereRadio, selectByPlaneRadio];
         radioGroup.forEach((radio, index) => {
             radio.on('change', () => {
@@ -519,6 +610,7 @@ class ControlPanel extends Panel {
             addButton.enabled = index !== null;
             removeButton.enabled = index !== null;
 
+            // 这里和Set, Add, Remove按钮有关
             const controlSet = [
                 [selectBySizeSlider],
                 [selectByOpacitySlider],
@@ -597,7 +689,8 @@ class ControlPanel extends Panel {
         });
 
         deleteSelectionFilterButton.on('click', () => {
-            events.fire('deleteSelection2', sliderR.value, sliderG.value, sliderB.value);
+            events.fire('deleteSelection2', sliderR.value, filterRMaxSlider.value, 
+            sliderG.value, filterGMaxSlider.value, sliderB.value, filterBMaxSlider.value);
         });
 
         resetButton.on('click', () => {

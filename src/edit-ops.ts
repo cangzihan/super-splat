@@ -74,7 +74,7 @@ class DeleteSelectionEditOp2 {
     indices: Uint32Array;
     opacity: Float32Array;
 
-    constructor(splatData: GSplatData, colorThresholdR: number, colorThresholdG: number, colorThresholdB: number) {
+    constructor(splatData: GSplatData, colorThresholdR: number, colorThresholdRMax: number, colorThresholdG: number, colorThresholdGMax: number, colorThresholdB: number, colorThresholdBMax: number) {
         const selection = splatData.getProp('selection');
         const f_dc_0 = splatData.getProp('f_dc_0');
         const f_dc_1 = splatData.getProp('f_dc_1');
@@ -82,7 +82,9 @@ class DeleteSelectionEditOp2 {
         const opacity = splatData.getProp('opacity');
         const indices = buildIndex(splatData, (i) => {
             // 同时满足选区和颜色的条件
-            return selection[i] > 0 && f_dc_0[i] > colorThresholdR && f_dc_1[i] > colorThresholdG && f_dc_2[i] > colorThresholdB;
+            return selection[i] > 0 && f_dc_0[i] > colorThresholdR && f_dc_1[i] > colorThresholdG 
+            && f_dc_2[i] > colorThresholdB && f_dc_0[i] < colorThresholdRMax
+            && f_dc_1[i] < colorThresholdGMax && f_dc_2[i] < colorThresholdBMax;
         });
 
         this.splatData = splatData;

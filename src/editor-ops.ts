@@ -478,10 +478,10 @@ const registerEvents = (events: Events, editHistory: EditHistory, scene: Scene, 
         });
     });
 
-    events.on('deleteSelection2', (valueR: number, valueG: number, valueB: number) => {
+    events.on('deleteSelection2', (valueR: number, valueRMax: number, valueG: number, valueGMax: number, valueB: number, valueBMax: number) => {
         splatDefs.forEach((splatDef) => {
             const splatData = splatDef.data;
-            editHistory.add(new DeleteSelectionEditOp2(splatData, valueR, valueG, valueB));
+            editHistory.add(new DeleteSelectionEditOp2(splatData, valueR, valueRMax, valueG, valueGMax, valueB, valueBMax));
         });
     });
 
